@@ -103,4 +103,30 @@ router.delete("/delete", async (req, res) => {
   }
 });
 
+//update
+router.put("/level", async (req, res) => {
+  try {
+    let result = await user_table.update(req.body, {
+      where: { username: req.body.username },
+    });
+    res.json({ result, api_result: constance.result_ok });
+  } catch (error) {
+    res.json({ error, api_result: constance.result_nok });
+  }
+});
+
+router.post("/query", async (req, res) => {
+  try {
+    let result = await user_table.sequelize.query(
+      `SELECT [levelUser], count([levelUser]) as [qty]     
+      FROM [training_node_js_safem0de].[dbo].[users]
+      group by [levelUser]`
+    );
+    // console.log(result);
+    res.json({ result:result[0], api_result: constance.result_ok });
+  } catch (error) {
+    res.json({ error, api_result: constance.result_nok });
+  }
+});
+
 module.exports = router;
